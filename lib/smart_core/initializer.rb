@@ -22,7 +22,6 @@ module SmartCore
     require_relative 'initializer/dsl'
     require_relative 'initializer/instance_attribute_accessing'
     require_relative 'initializer/functionality'
-    require_relative 'initializer/validation_context'
 
     class << self
       # @param base_klass [Class]

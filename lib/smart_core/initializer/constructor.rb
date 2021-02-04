@@ -121,8 +121,7 @@ class SmartCore::Initializer::Constructor
         parameter_value = attribute.type.cast(parameter_value)
       end
 
-      context = build_validation_context(instance, attribute)
-      attribute.type.validate!(parameter_value, context)
+      attribute.type.validate!(parameter_value, instance, attribute)
 
       final_value = attribute.finalizer.call(parameter_value, instance)
       instance.instance_variable_set("@#{attribute.name}", final_value)
@@ -143,8 +142,7 @@ class SmartCore::Initializer::Constructor
         option_value = attribute.type.cast(option_value)
       end
 
-      context = build_validation_context(instance, attribute)
-      attribute.type.validate!(option_value, context)
+      attribute.type.validate!(option_value, instance, attribute)
 
       final_value = attribute.finalizer.call(option_value, instance)
       instance.instance_variable_set("@#{attribute.name}", final_value)
@@ -193,9 +191,5 @@ class SmartCore::Initializer::Constructor
     end
 
     [extracted_parameters, extracted_options]
-  end
-
-  def build_validation_context(instance, attribute)
-    SmartCore::Initializer::ValidationContext.new(instance, attribute)
   end
 end
