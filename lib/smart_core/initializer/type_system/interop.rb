@@ -68,8 +68,8 @@ class SmartCore::Initializer::TypeSystem::Interop
   #
   # @api private
   # @since 0.1.0
-  def validate!(value)
-    validate_op.call(value)
+  def validate!(value, context)
+    validate_op.call(value, context)
   end
 
   # @param value [Any]

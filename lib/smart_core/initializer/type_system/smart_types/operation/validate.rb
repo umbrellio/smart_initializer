@@ -9,7 +9,7 @@ module SmartCore::Initializer::TypeSystem::SmartTypes::Operation
     #
     # @api private
     # @since 0.1.0
-    def call(value)
+    def call(value, _context)
       type.validate!(value)
     end
   end

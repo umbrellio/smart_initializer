@@ -9,11 +9,13 @@ module SmartCore::Initializer::TypeSystem::ThyTypes::Operation
     #
     # @api private
     # @since 0.1.0
-    def call(value)
-      raise(
-        SmartCore::Initializer::ThyTypeValidationError,
-        "Thy::Types validation error: (get #{value.inspect} for type #{type.inspect}"
-      ) unless type.check(value).success?
+    def call(value, context)
+      return if type.check(value).success?
+
+      raise(SmartCore::Initializer::ThyTypeValidationError, <<~ERROR_MESSAGE)
+        Incorrect type of #{context.attribute.name} attribute for #{context.instance.class}
+        Expected: #{type.inspect}, but got: #{value.inspect}
+      ERROR_MESSAGE
     end
   end
 end
