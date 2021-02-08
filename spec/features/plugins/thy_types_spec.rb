@@ -113,24 +113,28 @@ RSpec.describe 'Plugins: thy_types', plugin: :thy_types do
     end
 
     specify 'validation' do
-      data_klass = Class.new do
+      class TestClass
         include SmartCore::Initializer(type_system: :thy_types)
         param :nickname, 'string'
         option :age, 'integer'
       end
 
       # NOTE: invalid
-      expect { data_klass.new('test', { age: '123' }) }.to raise_error(
-        SmartCore::Initializer::ThyTypeValidationError
-      )
+      expect { TestClass.new('test', { age: '123' }) }.to raise_error(
+        SmartCore::Initializer::ThyTypeValidationError, <<~MESSAGE)
+          Incorrect type of :age attribute for TestClass
+          Expected: Thy::Types::Integer, but got: "123"
+        MESSAGE
 
       # NOTE: invalid
-      expect { data_klass.new(123, { age: 123 }) }.to raise_error(
-        SmartCore::Initializer::ThyTypeValidationError
-      )
+      expect { TestClass.new(123, { age: 123 }) }.to raise_error(
+        SmartCore::Initializer::ThyTypeValidationError, <<~MESSAGE)
+          Incorrect type of :nickname attribute for TestClass
+          Expected: Thy::Types::String, but got: 123
+        MESSAGE
 
       # NOTE: valid
-      expect { data_klass.new('123', { age: 123 }) }.not_to raise_error
+      expect { TestClass.new('123', { age: 123 }) }.not_to raise_error
     end
 
     specify 'validation check for smart-types mixed with thy-types' do
